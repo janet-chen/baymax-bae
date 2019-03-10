@@ -1,0 +1,45 @@
+body {
+    background: #A0DDE6;
+    padding: 50px;
+    font-family: Helvetica;
+}
+
+#baymax {
+    transition: all 0.2s;
+    margin: 0 auto;
+    width: 400px;
+}
+
+#banner-message {
+    background: #5C946E;
+    border-radius: 10px;
+    padding: 20px;
+    font-size: 25px;
+    color: white;
+    text-align: center;
+    transition: all 0.2s;
+    margin: 0 auto;
+    width: 400px;
+}
+
+button {
+    background: #2A2D34;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 14px;
+    font-size: 15px;
+    color: white;
+    margin: 0 auto;
+}
+
+#banner-message2 {
+    background: #0084ff;
+    color: #fff;
+    margin-top: 40px;
+    width: 200px;
+}
+
+#banner-message.alt button {
+    background: #fff;
+    color: #000;
+}
