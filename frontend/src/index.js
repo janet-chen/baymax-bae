@@ -1,46 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './main.css';
-function Square(props) {
-    return (
-        <button className="square" onClick={props.onClick}>
-            {props.value}
-        </button>
-    );
-}
-
-class Board extends React.Component {
-    renderSquare(i) {
-        return (
-            <Square
-                value={this.props.squares[i]}
-                onClick={() => this.props.onClick(i)}
-            />
-        );
-    }
-
-    render() {
-        return (
-            <div>
-                <div className="message">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
-            </div>
-        );
-    }
-}
+import baymax from './images/baymax2.png';
+import {STEP} from "./constants";
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 function Message(props) {
     return (
@@ -50,58 +13,109 @@ function Message(props) {
     );
 }
 
-class Welcome extends React.Component {
+function BaymaxImage() {
+    return (
+        <div >
+            <img id="baymax" src={baymax}/>
+        </div>
+    );
+
+}
+
+class Baymax extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            step : props.step
+        };
+    }
+
+    renderWelcome() {
+        return (
+            <div>
+                <p>{this.state.step}</p>
+                <Message message="Hi, I'm Baymax, your personal health assistant."/>
+                <BaymaxImage/>
+            </div>
+        );
+    }
+
+    render() {
+        switch (this.state.step) {
+            case STEP.WELCOME:
+                return this.renderWelcome();
+            case STEP.CALCULATE:
+                return (<p>{this.state.step}</p>);
+                break;
+            case STEP.REPORT:
+                return (<p>{this.state.step}</p>);
+                break;
+            case STEP.SUGGESTION:
+                break;
+            case STEP.FINISH:
+                break;
+        }
+    }
+
+}
+
+class Controller extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            step : STEP.WELCOME,
+            timer : 5
         };
+        this.intervalHandle = setInterval(
+            () => this.tick(),
+            1000
+        );
+    }
+
+    updateStep() {
+        console.log("step", this.state.step);
+        STEP.enu
+        this.setState({
+            step: STEP[this.state.step++],
+            timer: this.state.timer
+        });
+        console.log(this.state.step);
+    }
+
+    tick() {
+        console.log(this.state.timer);
+        if (this.state.timer < 0) {
+            clearInterval(this.intervalHandle);
+            this.updateStep();
+        } else {
+            let newTimer = this.state.timer - 1;
+            this.setState({
+                step: this.state.step,
+                timer: newTimer
+            });
+        }
     }
 
     render() {
         return (
-            <div className="welcome">
-                <Message message="Hi, I'm Baymax, your personal health assistant."/>
+            <div>
+                <div className="center-div">
+                    <Baymax step={this.state.step}/>
+                </div>
+                {/*<ReactCSSTransitionGroup*/}
+                    {/*transitionName="welcome-image"*/}
+                    {/*transitionEnterTimeout={500}*/}
+                    {/*transitionLeaveTimeout={300}>*/}
+                {/*</ReactCSSTransitionGroup>*/}
             </div>
         );
-        // const history = this.state.history;
-        // const current = history[this.state.stepNumber];
-        // const winner = calculateWinner(current.squares);
-        //
-        // const moves = history.map((step, move) => {
-        //     const desc = move ?
-        //         'Go to move #' + move :
-        //         'Go to game start';
-        //     return (
-        //         <li key={move}>
-        //             <button onClick={() => this.jumpTo(move)}>{desc}</button>
-        //         </li>
-        //     );
-        // });
-        //
-        // let status;
-        // if (winner) {
-        //     status = "Winner: " + winner;
-        // } else {
-        //     status = "Next player: " + (this.state.xIsNext ? "X" : "O");
-        // }
-        //
-        // return (
-        //     <div className="game">
-        //         <div className="game-board">
-        //             <Board
-        //                 squares={current.squares}
-        //                 onClick={i => this.handleClick(i)}
-        //             />
-        //         </div>
-        //         <div className="game-info">
-        //             <div>{status}</div>
-        //             <ol>{moves}</ol>
-        //         </div>
-        //     </div>
-        // );
     }
 }
 
 // ========================================
 
-ReactDOM.render(<Welcome />, document.getElementById("root"));
+ReactDOM.render(<Controller/>, document.getElementById("root"));
+
+function getStepFromValue(value) {
+    return Object.keys(STEP).find(key => STEP[key] === value);
+}

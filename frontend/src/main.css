@@ -43,3 +43,28 @@ button {
     background: #fff;
     color: #000;
 }
+
+.center-div
+{
+    position: relative;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.welcome-image-enter {
+    opacity: 0.01;
+}
+
+.welcome-image-enter.welcome-image-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+}
+
+.welcome-image-leave {
+    opacity: 1;
+}
+
+.welcome-image-leave.welcome-image-leave-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in;
+}
